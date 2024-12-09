@@ -4,12 +4,12 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDrRw9cSeckdFzpzCqJT-Pc0DfeY10hPUw",
-  authDomain: "kidsroutineapp-93d4d.firebaseapp.com",
-  projectId: "kidsroutineapp-93d4d",
-  storageBucket: "kidsroutineapp-93d4d.firebasestorage.app",
-  messagingSenderId: "138988674283",
-  appId: "1:138988674283:android:464a64a43f6be8b935f2ae",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
 if (!firebase.apps.length) {
