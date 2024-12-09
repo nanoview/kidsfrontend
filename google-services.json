@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138988674283",
+    "project_id": "kidsroutineapp-93d4d",
+    "storage_bucket": "kidsroutineapp-93d4d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138988674283:android:464a64a43f6be8b935f2ae",
+        "android_client_info": {
+          "package_name": "com.wecandotoo.kidsroutineapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrRw9cSeckdFzpzCqJT-Pc0DfeY10hPUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

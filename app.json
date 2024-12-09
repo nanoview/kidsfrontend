@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "KidsRoutineApp",
+    "slug": "kidsroutineapp",
+    "platforms": [
+      "android"
+    ],
+    "version": "1.0.0",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.shapnokhan.kidsroutineapp"
+    },
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6acbfc17-39b3-4de3-975b-33d7fe184860"
+      }
+    }
+  }
+}
