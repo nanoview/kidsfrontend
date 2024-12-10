@@ -1,25 +1,30 @@
 {
   "expo": {
-    "name": "KidsRoutineApp",
-    "slug": "kidsroutineapp",
-    "platforms": [
-      "android"
-    ],
+    "name": "Kids Routine App",
+    "slug": "Kids-Routine-App",
     "version": "1.0.0",
+    "entryPoint": "./index.js",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.shapnokhan.kidsroutineapp"
+      "package": "com.wecandotoo.KidsRoutineApp"
     },
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "6acbfc17-39b3-4de3-975b-33d7fe184860"
-      }
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

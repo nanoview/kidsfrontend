@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { auth } from './src/services/firebase';
-import AppNavigator from './src/navigation/AppNavigator';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
+import { StatusBar } from 'react-native';
+import AppNavigator from './navigation/AppNavigator';
+import { AuthProvider } from './contexts/AuthContext'; // Import AuthProvider
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#8A2BE2', // Violet color
+    accent: '#8A2BE2', // Violet color
+  },
+};
 
 const App = () => {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState(null);
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
   return (
     <SafeAreaProvider>
-      
-        <AppNavigator user={user} />
-    
+      <PaperProvider theme={theme}>
+        <AuthProvider>
+          <StatusBar backgroundColor="#8A2BE2" barStyle="light-content" />
+          <AppNavigator />
+        </AuthProvider>
+      </PaperProvider>
     </SafeAreaProvider>
   );
 };
