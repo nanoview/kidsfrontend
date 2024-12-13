@@ -1,3 +1,5 @@
+//AuthNavigator.js
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaView, StyleSheet } from 'react-native';
@@ -6,12 +8,12 @@ import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 
 const AppNavigator = () => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
 
   return (
     <NavigationContainer>
       <SafeAreaView style={styles.container}>
-        {currentUser ? <MainNavigator /> : <AuthNavigator />}
+        {user ? <MainNavigator /> : <AuthNavigator />}
       </SafeAreaView>
     </NavigationContainer>
   );

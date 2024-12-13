@@ -1,3 +1,4 @@
+//AuthNavigator.js
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from '../screens/LandingScreen';
@@ -13,6 +14,7 @@ const AuthNavigator = () => (
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Signup" component={SignupScreen} />
     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+     
   </Stack.Navigator>
 );
 

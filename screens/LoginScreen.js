@@ -1,3 +1,4 @@
+//LoginScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,15 +12,22 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const { setUser } = useAuth();
   const { colors } = useTheme();
+  const handleLogin = async () => {
+    try {
+      // Call Firebase sign-in method
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
 
-  const handleLogin = () => {
-    auth.signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        setUser(userCredential.user);
-        navigation.navigate('Home');
-      })
-      .catch(error => alert(error.message));
+      // Set the user in the context
+      setUser(userCredential.user);
+
+      // Navigate to HomeScreen
+      navigation.navigate('MainHome');
+    } catch (error) {
+      // Handle and display errors
+      alert(error.message);
+    }
   };
+
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -69,6 +77,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: '#ff6347',

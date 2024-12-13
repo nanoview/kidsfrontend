@@ -1,11 +1,11 @@
-//DashboardScreen.js
+//HomeScreen.js
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/Card';
 import { useAuth } from '../contexts/AuthContext';
 
-const Home = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default HomeScreen;

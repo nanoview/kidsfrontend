@@ -1,8 +1,9 @@
+//MainNavigator.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import DashboardScreen from '../screens/DashboardScreen';
+import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ToDoScreen from '../screens/ToDoScreen';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
@@ -19,20 +20,19 @@ const TabNavigator = () => (
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
         if (route.name === 'Home') iconName = 'home';
-        else if (route.name === 'Profile') iconName = 'user';
-        else if (route.name === 'ToDo') iconName = 'list';
-        else if (route.name === 'ChatRoom') iconName = 'comments';
-        else if (route.name === 'BookList') iconName = 'book';
+        else if (route.name === 'Profile'){ iconName = 'user'; color ='orange'}
+        else if (route.name === 'ToDo'){ iconName = 'list'; color='cyan' }
+        else if (route.name === 'ChatRoom'){ iconName = 'comments'; color = 'green'}
+        else if (route.name === 'BookList') {iconName = 'book'; color = 'coral'}
         else if (route.name === 'Routines') iconName = 'calendar';
         return <Icon name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ff6347',
-      tabBarInactiveTintColor: 'gray',
+      tabBarActiveTintColor: 'violet',
       headerShown: false,
       tabBarHideOnKeyboard: true,
     })}
   >
-    <Tab.Screen name="Dashboard" component={DashboardScreen} />
+    <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
     <Tab.Screen name="ToDo" component={ToDoScreen} />
     <Tab.Screen name="ChatRoom" component={ChatRoomScreen} />
@@ -43,16 +43,18 @@ const TabNavigator = () => (
 
 const MainNavigator = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Home" component={TabNavigator} options={{
-      header: () => (
-        <CustomNavigator
-          title="Child Zone"
-          onIconPress1={() => alert('Home Pressed')}
-          onIconPress2={() => alert('Search Pressed')}
-          onIconPress3={() => alert('Settings Pressed')}
-        />
-      )
-    }} />
+    <Stack.Screen
+      name="MainHome" // Changed from "Home" to "MainHome"
+      component={TabNavigator}
+      options={{
+        header: () => (
+          <CustomNavigator
+            title="Child Zone"
+            onIconPress3={() => alert('Settings Pressed')}
+          />
+        ),
+      }}
+    />
   </Stack.Navigator>
 );
 
