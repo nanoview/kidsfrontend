@@ -1,26 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {  Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { auth, db } from '../services/firebase';
+import { db } from '../services/firebase';
+import { useAuth } from '../contexts/AuthContext';
 
 const ProfileScreen = () => {
-  const [user, setUser] = useState(null);
+  const { currentUser } = useAuth();
   const [profilePicture, setProfilePicture] = useState(null);
   const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [userDataArray, setUserDataArray] = useState([]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        setUser(user);
-        const userProfile = await db.collection('users').doc(user.uid).get();
-        setProfile(userProfile.data());
+      try {
+        if (currentUser) {
+          console.log('Logged in user email:', currentUser.email);
+          console.log('Logged in user ID:', currentUser.uid);
+          const userProfile = await db.collection('profiles').doc(currentUser.uid).get();
+          if (userProfile.exists) {
+            const userData = userProfile.data();
+            setProfile(userData);
+            setUserDataArray(Object.entries(userData));
+            console.log('User Data Array:', Object.entries(userData));
+          } else {
+            console.log('No such document!');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUserProfile();
-  }, []);
+  }, [currentUser]);
 
   const selectImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -41,7 +57,7 @@ const ProfileScreen = () => {
     }
   };
 
-  if (!user) return <Text>Loading...</Text>;
+  if (loading) return <Text>Loading...</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,10 +67,10 @@ const ProfileScreen = () => {
           style={styles.profilePicture}
         />
       </TouchableOpacity>
-      <Text style={styles.userName}>{profile.firstName} {profile.lastName}</Text>
-      <Text style={styles.userDetail}>Nickname: {profile.nickname}</Text>
-      <Text style={styles.userDetail}>Date of Birth: {profile.dateOfBirth}</Text>
-      <Text style={styles.userDetail}>Email: {user.email}</Text>
+      <Text style={styles.userName}>{profile?.firstName || ''} {profile?.lastName || ''}</Text>
+      <Text style={styles.userDetail}>Nickname: {profile?.nickname || ''}</Text>
+      <Text style={styles.userDetail}>Date of Birth: {profile?.dateOfBirth || ''}</Text>
+      <Text style={styles.userDetail}>Email: {currentUser?.email || ''}</Text>
     </SafeAreaView>
   );
 };

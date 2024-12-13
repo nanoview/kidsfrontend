@@ -26,7 +26,7 @@ const SignupScreen = ({ navigation }) => {
           email: user.email,
         });
 
-        navigation.navigate('Dashboard'); // Navigate to Dashboard after successful signup
+        navigation.navigate('login'); // Navigate to Dashboard after successful signup
       })
       .catch(error => alert(error.message));
   };

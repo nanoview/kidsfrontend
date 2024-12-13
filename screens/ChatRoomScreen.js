@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from 'react-native';
-import { auth, db } from '../services/firebase';
+import { auth, db,  } from '../services/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import firebase from '../services/firebase'; // Add this line
 
 const ChatRoomScreen = () => {
   const [messages, setMessages] = useState([]);

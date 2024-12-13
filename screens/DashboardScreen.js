@@ -1,10 +1,22 @@
 //DashboardScreen.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/Card';
+import { useAuth } from '../contexts/AuthContext';
 
-const DashboardScreen = ({ navigation }) => {
+const Home = ({ navigation }) => {
+  const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log('Logged in user email:', currentUser.email);
+      console.log('Logged in user ID:', currentUser.uid);
+    }
+    setLoading(false);
+  }, [currentUser]); // Added missing dependency array and closing bracket
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -21,8 +33,6 @@ const DashboardScreen = ({ navigation }) => {
           <Text>Finish math exercises 1-10.</Text>
         </Card>
       </ScrollView>
-      
-     
     </SafeAreaView>
   );
 };
@@ -51,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen;
+export default Home;

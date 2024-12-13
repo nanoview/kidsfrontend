@@ -3,6 +3,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/database';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDrRw9cSeckdFzpzCqJT-Pc0DfeY10hPUw",
   authDomain: "kidsroutineapp-93d4d.firebaseapp.com",
@@ -19,3 +20,4 @@ if (!firebase.apps.length) {
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const database = firebase.database();
+export default firebase;

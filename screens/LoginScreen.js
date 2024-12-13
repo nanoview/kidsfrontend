@@ -1,23 +1,22 @@
-//LoginScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useAuth } from '../contexts/AuthContext'; // Import useAuth
+import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../services/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useTheme } from 'react-native-paper'; // Import useTheme
+import { useTheme } from 'react-native-paper';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setUser } = useAuth(); // Use the custom hook
-  const { colors } = useTheme(); // Use the theme colors
+  const { setUser } = useAuth();
+  const { colors } = useTheme();
 
   const handleLogin = () => {
     auth.signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        setUser(userCredential.user); // Set the user in context
-        navigation.navigate('Home'); // Navigate to Home screen
+        setUser(userCredential.user);
+        navigation.navigate('Home');
       })
       .catch(error => alert(error.message));
   };
