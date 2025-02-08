@@ -11,7 +11,7 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
-    "@react-native-firebase/app": "^21.6.1",
+    "@react-native-firebase/app": "^21.7.2",
     "@react-native-firebase/firestore": "^21.6.1",
     "@react-native-picker/picker": "2.10.2",
     "@react-navigation/bottom-tabs": "^7.1.3",
