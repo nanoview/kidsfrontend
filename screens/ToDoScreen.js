@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, FlatList, StyleSheet, TouchableOpacity } from
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { db, auth } from '../services/firebase';
 
-const ToDoScreen = () => {
+const ToDoScreen = ({ navigation }) => {
   const [groupedTasks, setGroupedTasks] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -76,6 +76,13 @@ const ToDoScreen = () => {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-left" size={24} color="#8A2BE2" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>✓ My To-Do List</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <Text>Loading...</Text>
       </SafeAreaView>
     );
@@ -83,6 +90,13 @@ const ToDoScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={24} color="#8A2BE2" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>✓ My To-Do List</Text>
+        <View style={{ width: 40 }} />
+      </View>
       {Object.keys(groupedTasks).map(dateDay => (
         <View key={dateDay} style={styles.group}>
           <Text style={styles.dateHeader}>{dateDay}</Text>
@@ -100,7 +114,25 @@ const ToDoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#8A2BE2',
   },
   group: {
     marginBottom: 16,

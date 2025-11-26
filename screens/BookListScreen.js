@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, FlatList, StyleSheet, TouchableOpacity } from
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { db, auth } from '../services/firebase';
 
-const BookListScreen = () => {
+const BookListScreen = ({ navigation }) => {
   const [books, setBooks] = useState([]);
   const [itemType, setItemType] = useState('book'); // Default to 'book'
 
@@ -30,6 +30,13 @@ const BookListScreen = () => {
   if (!auth.currentUser) {
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-left" size={24} color="#8A2BE2" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>📘 My Books</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <Text style={styles.initialText}>Please log in to view your book list.</Text>
       </SafeAreaView>
     );
@@ -53,13 +60,18 @@ const BookListScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={24} color="#8A2BE2" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>📚 My Books</Text>
+        <View style={{ width: 40 }} />
+      </View>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => setItemType('book')} style={styles.iconButton}>
           <Icon name="book" size={30} color={itemType === 'book' ? '#1e90ff' : '#000'} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.header}>My Book List</Text>
-     
       <Text style={styles.subHeader}>Read Books</Text>
       <FlatList
         data={readBooks}
@@ -79,6 +91,28 @@ const BookListScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#8A2BE2',
+  },
   container: {
     flex: 1,
     padding: 16,

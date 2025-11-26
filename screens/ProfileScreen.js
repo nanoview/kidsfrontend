@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {  Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { currentUser } = useAuth();
   const [profilePicture, setProfilePicture] = useState(null);
   const [profile, setProfile] = useState({});
@@ -61,6 +62,15 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={24} color="#8A2BE2" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>👤 My Profile</Text>
+        <View style={{ width: 40 }} />
+      </View>
+      
+      <View style={styles.profileContent}>
       <TouchableOpacity onPress={selectImage}>
         <Image
           source={profilePicture ? { uri: profilePicture } : require('../assets/default-profile.png')}
@@ -71,12 +81,35 @@ const ProfileScreen = () => {
       <Text style={styles.userDetail}>Nickname: {profile?.nickname || ''}</Text>
       <Text style={styles.userDetail}>Date of Birth: {profile?.dateOfBirth || ''}</Text>
       <Text style={styles.userDetail}>Email: {currentUser?.email || ''}</Text>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#8A2BE2',
+  },
+  profileContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
