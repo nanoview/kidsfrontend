@@ -1,6 +1,6 @@
 //LoginScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../services/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,52 +10,94 @@ import { useTheme } from 'react-native-paper';
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setUser } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { user } = useAuth();
   const { colors } = useTheme();
+  
   const handleLogin = async () => {
+    // Validate inputs
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
+
     try {
+      setLoading(true);
+      setError('');
+      
       // Call Firebase sign-in method
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
-
-      // Set the user in the context
-      setUser(userCredential.user);
-
-      // Navigate to HomeScreen
-      navigation.navigate('MainHome');
+      
+      console.log('Login successful:', userCredential.user.email);
+      // Navigation will happen automatically via AppNavigator when user state changes
+      
     } catch (error) {
-      // Handle and display errors
-      alert(error.message);
+      console.log('Login error:', error.message);
+      setError(error.message);
+      setLoading(false);
     }
   };
-
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <Icon name="smile-o" size={50} color={colors.primary} style={styles.icon} />
+      
       <TextInput
         placeholder="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          setEmail(text);
+          setError('');
+        }}
+        editable={!loading}
         style={[styles.input, { borderColor: colors.primary }]}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
+      
       <TextInput
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(text) => {
+          setPassword(text);
+          setError('');
+        }}
+        editable={!loading}
         secureTextEntry
         style={[styles.input, { borderColor: colors.primary }]}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      
+      <TouchableOpacity 
+        style={[styles.button, loading && styles.buttonDisabled]} 
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Login</Text>
+        )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={styles.link}>
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('ForgotPassword')} 
+        style={styles.link}
+        disabled={loading}
+      >
         <Text style={styles.linkText}>Forgot Password? Reset Here</Text>
       </TouchableOpacity>
 
-      <Text onPress={() => navigation.navigate('Signup')} style={[styles.linkText, { color: colors.accent }]}>
-        Don't have an account? Sign Up
-      </Text>
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('Signup')}
+        disabled={loading}
+      >
+        <Text style={[styles.linkText, { color: colors.accent }]}>
+          Don't have an account? Sign Up
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -87,6 +129,9 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
   buttonText: {
     color: '#fff',
     fontSize: 18,
@@ -96,6 +141,12 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
 
