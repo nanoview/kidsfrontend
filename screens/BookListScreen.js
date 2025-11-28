@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { db, auth } from '../services/firebase';
 
@@ -72,20 +72,28 @@ const BookListScreen = ({ navigation }) => {
           <Icon name="book" size={30} color={itemType === 'book' ? '#1e90ff' : '#000'} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.subHeader}>Read Books</Text>
-      <FlatList
-        data={readBooks}
-        renderItem={renderBook}
-        keyExtractor={item => item.id}
-        style={styles.list}
-      />
-      <Text style={styles.subHeader}>Currently Reading</Text>
-      <FlatList
-        data={currentBooks}
-        renderItem={renderBook}
-        keyExtractor={item => item.id}
-        style={styles.list}
-      />
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        scrollEnabled={true}
+      >
+        <Text style={styles.subHeader}>Read Books</Text>
+        <FlatList
+          data={readBooks}
+          renderItem={renderBook}
+          keyExtractor={item => item.id}
+          scrollEnabled={false}
+          nestedScrollEnabled={false}
+        />
+        <Text style={styles.subHeader}>Currently Reading</Text>
+        <FlatList
+          data={currentBooks}
+          renderItem={renderBook}
+          keyExtractor={item => item.id}
+          scrollEnabled={false}
+          nestedScrollEnabled={false}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -113,18 +121,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#8A2BE2',
   },
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#f0f8ff', // AliceBlue background color
-  },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
   iconButton: {
     marginHorizontal: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingBottom: 30,
   },
   initialText: {
     textAlign: 'center',
@@ -132,30 +144,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#ff6347', // Tomato color
-  },
   subHeader: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#1e90ff', // DodgerBlue color
-  },
-  listContainer: {
-    flex: 1,
-  },
-  list: {
-    marginBottom: 20,
+    marginBottom: 12,
+    marginTop: 10,
+    color: '#1e90ff',
   },
   bookItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    padding: 12,
     backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 10,
@@ -165,17 +165,21 @@ const styles = StyleSheet.create({
   bookTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    flex: 1,
   },
   bookAuthor: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 13,
+    color: '#666',
+    marginTop: 4,
   },
   bookDate: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 13,
+    color: '#888',
+    marginTop: 4,
   },
   readButton: {
-    padding: 5,
+    padding: 8,
+    marginLeft: 10,
   },
 });
 

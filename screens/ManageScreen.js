@@ -19,7 +19,7 @@ const TOOL_SIZE = (width - 60) / 2;
 const ManageScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const [animatedValues] = useState(
-    Array(5).fill(null).map(() => new Animated.Value(1))
+    Array(7).fill(null).map(() => new Animated.Value(1))
   );
 
   const managementTools = [
@@ -63,19 +63,33 @@ const ManageScreen = ({ navigation }) => {
       action: () => navigation.navigate('RoutineForm'),
       emoji: '➕',
     },
+    {
+      id: 6,
+      name: 'Add Task',
+      icon: 'check-square',
+      color: '#B19CD9',
+      action: () => navigation.navigate('ToDoForm'),
+      emoji: '\u270f\ufe0f',
+    },
+    {
+      id: 7,
+      name: 'Edit Profile',
+      icon: 'user-edit',
+      color: '#C7CEEA',
+      action: () => navigation.navigate('ProfileForm'),
+      emoji: '\ud83d\udcc4',
+    },
   ];
 
   const handlePressIn = (index) => {
     Animated.spring(animatedValues[index], {
       toValue: 0.9,
-      useNativeDriver: true,
     }).start();
   };
 
   const handlePressOut = (index) => {
     Animated.spring(animatedValues[index], {
       toValue: 1,
-      useNativeDriver: true,
     }).start();
   };
 
@@ -175,10 +189,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
+    boxShadow: '0 8px 10px rgba(0, 0, 0, 0.3)',
     elevation: 12,
     position: 'relative',
   },

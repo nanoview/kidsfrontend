@@ -10,6 +10,8 @@ import RoutinesScreen from '../screens/RoutinesScreen';
 import ClassroomScreen from '../screens/ClassroomScreen';
 import ManageScreen from '../screens/ManageScreen';
 import RoutineFormScreen from '../screens/RoutineFormScreen';
+import ToDoFormScreen from '../screens/ToDoFormScreen';
+import ProfileFormScreen from '../screens/ProfileFormScreen';
 import CustomNavigator from '../components/CustomNavigator';
 
 const Stack = createStackNavigator();
@@ -35,6 +37,8 @@ const MainNavigator = () => (
     <Stack.Screen name="Classroom" component={ClassroomScreen} />
     <Stack.Screen name="Manage" component={ManageScreen} />
     <Stack.Screen name="RoutineForm" component={RoutineFormScreen} />
+    <Stack.Screen name="ToDoForm" component={ToDoFormScreen} />
+    <Stack.Screen name="ProfileForm" component={ProfileFormScreen} />
   </Stack.Navigator>
 );
 

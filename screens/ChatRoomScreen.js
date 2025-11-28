@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, FlatList, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../services/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -35,18 +35,23 @@ const ChatRoomScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>💬 Chat Room</Text>
         <View style={{ width: 40 }} />
       </View>
-      <FlatList
-        data={messages}
-        renderItem={({ item }) => <Text>{item.text}</Text>}
-        keyExtractor={(_, index) => index.toString()}
-      />
-      <TextInput
-        value={input}
-        onChangeText={setInput}
-        placeholder="Type a message"
-        style={styles.input}
-      />
-      <Button title="Send" onPress={sendMessage} />
+      <ScrollView contentContainerStyle={styles.messagesContainer}>
+        <FlatList
+          data={messages}
+          renderItem={({ item }) => <Text style={styles.messageText}>{item.text}</Text>}
+          keyExtractor={(_, index) => index.toString()}
+          scrollEnabled={false}
+        />
+      </ScrollView>
+      <View style={styles.inputContainer}>
+        <TextInput
+          value={input}
+          onChangeText={setInput}
+          placeholder="Type a message"
+          style={styles.input}
+        />
+        <Button title="Send" onPress={sendMessage} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -74,16 +79,32 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
-  container: {
-    flex: 1,
-    padding: 20,
+  messagesContainer: {
+    flexGrow: 1,
+    padding: 10,
+  },
+  messageText: {
+    padding: 10,
+    backgroundColor: '#fff',
+    marginVertical: 5,
+    borderRadius: 8,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+    backgroundColor: '#fff',
   },
   input: {
+    flex: 1,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 12,
+    marginRight: 10,
     paddingHorizontal: 10,
+    borderRadius: 8,
   },
 });
 

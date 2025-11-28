@@ -1,4 +1,4 @@
-//RoutineFormScreen.js
+//ToDoFormScreen.js
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -16,49 +16,64 @@ import { useTheme } from 'react-native-paper';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 
-const RoutineFormScreen = ({ navigation }) => {
+const ToDoFormScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { user } = useAuth();
+  const [taskText, setTaskText] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [day, setDay] = useState('Monday');
-  const [startTime, setStartTime] = useState('09:00');
-  const [endTime, setEndTime] = useState('10:00');
-  const [activity, setActivity] = useState('');
+  const [priority, setPriority] = useState('Medium');
   const [loading, setLoading] = useState(false);
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const priorities = ['Low', 'Medium', 'High'];
 
-  const handleAddRoutine = async () => {
-    if (!activity.trim()) {
-      Alert.alert('Error', 'Please enter an activity name');
+  const handleAddTask = async () => {
+    if (!taskText.trim()) {
+      Alert.alert('Error', 'Please enter a task description');
       return;
     }
 
-    if (!startTime || !endTime) {
-      Alert.alert('Error', 'Please enter both start and end times');
+    if (!date) {
+      Alert.alert('Error', 'Please enter a date');
       return;
     }
 
     try {
       setLoading(true);
-      await db.collection('routines').add({
+      await db.collection('tasks').add({
         userId: user?.uid,
+        text: taskText,
+        date,
         day,
-        startTime,
-        endTime,
-        activity,
+        priority,
+        completed: false,
         createdAt: new Date(),
       });
 
-      Alert.alert('Success', 'Routine added successfully!');
+      Alert.alert('Success', 'Task added successfully!');
       // Reset form
+      setTaskText('');
+      setDate(new Date().toISOString().split('T')[0]);
       setDay('Monday');
-      setStartTime('09:00');
-      setEndTime('10:00');
-      setActivity('');
+      setPriority('Medium');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getPriorityColor = (p) => {
+    switch (p) {
+      case 'High':
+        return '#FF6B6B';
+      case 'Medium':
+        return '#FFE66D';
+      case 'Low':
+        return '#4ECDC4';
+      default:
+        return '#8A2BE2';
     }
   };
 
@@ -68,15 +83,42 @@ const RoutineFormScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-left" size={24} color="#8A2BE2" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>➕ Add Routine</Text>
+        <Text style={styles.headerTitle}>✏️ Add Task</Text>
         <View style={{ width: 40 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.form}>
-          {/* Day Picker */}
+          {/* Task Description */}
           <View style={styles.formGroup}>
-            <Text style={styles.label}>📅 Day</Text>
+            <Text style={styles.label}>📝 Task Description</Text>
+            <TextInput
+              style={[styles.input, { borderColor: colors.primary }]}
+              placeholder="E.g., Complete math homework, Read a book"
+              value={taskText}
+              onChangeText={setTaskText}
+              placeholderTextColor="#999"
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+
+          {/* Date */}
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>📅 Date</Text>
+            <TextInput
+              style={[styles.input, { borderColor: colors.primary }]}
+              placeholder="YYYY-MM-DD"
+              value={date}
+              onChangeText={setDate}
+              placeholderTextColor="#999"
+              keyboardType="default"
+            />
+          </View>
+
+          {/* Day of Week */}
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>🗓️ Day of Week</Text>
             <View style={[styles.pickerContainer, { borderColor: colors.primary }]}>
               <Picker
                 selectedValue={day}
@@ -90,53 +132,38 @@ const RoutineFormScreen = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Activity Name */}
+          {/* Priority */}
           <View style={styles.formGroup}>
-            <Text style={styles.label}>🎯 Activity</Text>
-            <TextInput
-              style={[styles.input, { borderColor: colors.primary }]}
-              placeholder="E.g., Mathematics, Sports, Music"
-              value={activity}
-              onChangeText={setActivity}
-              placeholderTextColor="#999"
-            />
-          </View>
-
-          {/* Start Time */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>🕐 Start Time</Text>
-            <TextInput
-              style={[styles.input, { borderColor: colors.primary }]}
-              placeholder="HH:MM (e.g., 09:00)"
-              value={startTime}
-              onChangeText={setStartTime}
-              placeholderTextColor="#999"
-              keyboardType="default"
-            />
-          </View>
-
-          {/* End Time */}
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>🕑 End Time</Text>
-            <TextInput
-              style={[styles.input, { borderColor: colors.primary }]}
-              placeholder="HH:MM (e.g., 10:00)"
-              value={endTime}
-              onChangeText={setEndTime}
-              placeholderTextColor="#999"
-              keyboardType="default"
-            />
+            <Text style={styles.label}>⭐ Priority</Text>
+            <View style={styles.priorityContainer}>
+              {priorities.map((p) => (
+                <TouchableOpacity
+                  key={p}
+                  style={[
+                    styles.priorityButton,
+                    {
+                      backgroundColor: getPriorityColor(p),
+                      borderWidth: priority === p ? 3 : 1,
+                      borderColor: priority === p ? '#333' : '#ccc',
+                    },
+                  ]}
+                  onPress={() => setPriority(p)}
+                >
+                  <Text style={styles.priorityText}>{p}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
           {/* Submit Button */}
           <TouchableOpacity
             style={[styles.submitButton, loading && styles.buttonDisabled]}
-            onPress={handleAddRoutine}
+            onPress={handleAddTask}
             disabled={loading}
           >
             <Icon name="plus" size={20} color="#fff" />
             <Text style={styles.submitButtonText}>
-              {loading ? 'Adding...' : 'Add Routine'}
+              {loading ? 'Adding...' : 'Add Task'}
             </Text>
           </TouchableOpacity>
 
@@ -144,7 +171,7 @@ const RoutineFormScreen = ({ navigation }) => {
           <View style={styles.infoBox}>
             <Text style={styles.infoEmoji}>💡</Text>
             <Text style={styles.infoText}>
-              Create routines to help organize your child's daily schedule
+              Create tasks to keep track of your child's daily activities and homework
             </Text>
           </View>
         </View>
@@ -212,6 +239,24 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
   },
+  priorityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  priorityButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priorityText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14,
+  },
   submitButton: {
     flexDirection: 'row',
     backgroundColor: '#8A2BE2',
@@ -254,4 +299,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RoutineFormScreen;
+export default ToDoFormScreen;

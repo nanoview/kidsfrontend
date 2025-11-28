@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { db, auth } from '../services/firebase';
 
@@ -97,16 +97,19 @@ const ToDoScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>✓ My To-Do List</Text>
         <View style={{ width: 40 }} />
       </View>
-      {Object.keys(groupedTasks).map(dateDay => (
-        <View key={dateDay} style={styles.group}>
-          <Text style={styles.dateHeader}>{dateDay}</Text>
-          <FlatList
-            data={groupedTasks[dateDay]}
-            renderItem={renderTask}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      ))}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {Object.keys(groupedTasks).map(dateDay => (
+          <View key={dateDay} style={styles.group}>
+            <Text style={styles.dateHeader}>{dateDay}</Text>
+            <FlatList
+              data={groupedTasks[dateDay]}
+              renderItem={renderTask}
+              keyExtractor={item => item.id}
+              scrollEnabled={false}
+            />
+          </View>
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -134,8 +137,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#8A2BE2',
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
   group: {
     marginBottom: 16,
+    marginHorizontal: 10,
   },
   dateHeader: {
     fontSize: 18,

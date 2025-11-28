@@ -84,14 +84,12 @@ const GameDashboardScreen = ({ navigation }) => {
   const handlePressIn = (index) => {
     Animated.spring(animatedValues[index], {
       toValue: 0.9,
-      useNativeDriver: true,
     }).start();
   };
 
   const handlePressOut = (index) => {
     Animated.spring(animatedValues[index], {
       toValue: 1,
-      useNativeDriver: true,
     }).start();
   };
 
@@ -187,10 +185,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
+    boxShadow: '0 8px 10px rgba(0, 0, 0, 0.3)',
     elevation: 12,
     position: 'relative',
   },
