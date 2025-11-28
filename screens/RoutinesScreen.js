@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     position: 'relative',
   },
-  dayButtonActive: {
+   dayButtonActive: {
     backgroundColor: '#8A2BE2',
   },
   dayButtonInactive: {
