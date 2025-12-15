@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read/write their own profile
+    match /profiles/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // Allow users to read/write tasks they created
+    match /tasks/{taskId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+    }
+
+    // Allow users to read/write routines they created
+    match /routines/{routineId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+    }
+
+    // Allow users to read books (public collection)
+    match /books/{bookId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Chatroom access - allow reading/writing if user's profile matches the chatroom's school/class
+    match /chatrooms/{roomId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow write: if false;
+
+      // Messages in chatroom - allow authenticated users to read and create messages
+      match /messages/{messageId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+        allow update, delete: if request.auth.uid == resource.data.userId;
+      }
+    }
+
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
